@@ -1,0 +1,8 @@
+{% extends base_tpl %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block titulo_pag %}{{ titulo }}{% endblock %}
+{% block conteudo %}
+<h2 class="tit-pag">{{ titulo }}</h2>
+<div class="painel"><p>Este módulo ainda está em desenvolvimento.</p>
+<a class="bt azul" href="{{ url_for(volta) }}">Voltar ao painel</a></div>
+{% endblock %}

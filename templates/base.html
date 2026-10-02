@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block titulo %}Colégio Betânia{% endblock %}</title>
+<link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% block corpo %}
+<div class="app">
+  <nav class="lateral">
+    <div class="marca">Colégio Betânia</div>
+    {% block menu %}{% endblock %}
+    <a class="sair" href="{{ url_for('logout') }}">Terminar sessão</a>
+  </nav>
+  <main>
+    {% for m in get_flashed_messages() %}<div class="aviso" role="status">{{ m }}</div>{% endfor %}
+    {% block conteudo %}{% endblock %}
+  </main>
+</div>
+{% endblock %}
+</body>
+</html>

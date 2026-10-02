@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set nomes = {'aluno':'Aluno','professor':'Professor','admin':'Betânia ADM'} %}
+{% block titulo %}Entrar · Colégio Betânia{% endblock %}
+{% block corpo %}
+<div class="lg">
+  <div class="lg-arte" aria-hidden="true">
+    <svg viewBox="0 0 560 520" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#e1e1e1" stroke-width="2"><path d="M60 150l40-25 40 25v50l-40 25-40-25z"/><path d="M380 70c40 30 40 70 0 100s-40 70 0 100"/><path d="M410 70c-40 30-40 70 0 100s40 70 0 100"/><text x="330" y="230" font-size="26" fill="#e1e1e1" stroke="none">√ab</text><text x="60" y="260" font-size="24" fill="#e1e1e1" stroke="none">E = mc²</text></g>
+      <rect x="70" y="430" width="440" height="30" fill="#a9adb2"/><rect x="60" y="395" width="460" height="35" fill="#fff" stroke="#d6d6d6"/><rect x="90" y="360" width="400" height="35" fill="#3d4f5c"/>
+      <path d="M150 360 L255 200 L330 200 L330 360z" fill="#d96f2f"/><path d="M255 200 L460 200 L470 360 L330 360z" fill="#ebb593"/><path d="M330 200 L360 200 L360 360 L330 360z" fill="#f3f3f3"/>
+      <circle cx="245" cy="120" r="58" fill="#ebb593"/><path d="M225 175h40v22h-40z" fill="#b9bcc1"/><path d="M228 190h34M228 182h34" stroke="#8f9399" stroke-width="3"/>
+      <path d="M232 150q13-30 26 0" fill="none" stroke="#3d4f5c" stroke-width="4"/>
+      <g stroke="#3d4f5c" stroke-width="2.5" stroke-linecap="round"><path d="M165 80l-18-12M180 45l-8-16M315 70l16-14M305 38l6-16M175 125l-24 4M320 125l24 4"/></g>
+      <circle cx="115" cy="300" r="26" fill="#fff"/><g fill="#3d4f5c"><circle cx="105" cy="300" r="3"/><circle cx="115" cy="300" r="3"/><circle cx="125" cy="300" r="3"/></g>
+      <circle cx="455" cy="260" r="26" fill="#fff"/><g fill="#3d4f5c"><circle cx="445" cy="260" r="3"/><circle cx="455" cy="260" r="3"/><circle cx="465" cy="260" r="3"/></g>
+      <path d="M95 410q25-70 65-60l40 5-10 55z" fill="#d96f2f"/><circle cx="150" cy="310" r="22" fill="#6b4a3a"/><path d="M130 300q20-26 44-4" fill="none" stroke="#2f2a2a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M330 330q60-40 130-20l10 50h-130z" fill="#3d4f5c"/><circle cx="440" cy="268" r="20" fill="#c98a5f"/><path d="M424 258q16-18 34-2z" fill="#d96f2f"/><rect x="385" y="320" width="75" height="42" rx="5" fill="#a9adb2"/>
+      <rect x="470" y="365" width="70" height="95" rx="22" fill="#6c7782"/><rect x="480" y="390" width="50" height="40" rx="8" fill="#ebb593"/>
+    </svg>
+  </div>
+  <div class="lg-lado"><div class="lg-card">
+    <img class="logo-img" src="{{ url_for('static', filename='logo.jpg') }}" alt="Colégio Betânia" width="120">
+    <h1>Entre no Portal do Colégio Betânia</h1>
+    <p class="sub2">Insira os seus dados de utilizador abaixo para fazer login</p>
+    <div class="lg-tabs" role="tablist">
+      {% for r, n in nomes.items() %}<a class="{{ 'ativo' if r == role }}" href="{{ url_for('login', role=r) }}">{{ n }}</a>{% endfor %}
+    </div>
+    {% for m in get_flashed_messages() %}<div class="lg-erro" role="alert">{{ m }}</div>{% endfor %}
+    <form method="post">
+      <label for="email">Utilizador</label>
+      <input id="email" name="email" type="email" placeholder="nome@betania.ao" required autofocus>
+      <div class="lg-linha"><label for="senha">Palavra-passe</label><a class="preta" href="{{ url_for('ajuda', slug='recuperar-senha') }}">Esqueceu a palavra-passe?</a></div>
+      <div class="lg-olho">
+        <input id="senha" name="senha" type="password" placeholder="*****" required>
+        <button type="button" id="ver" aria-label="Mostrar palavra-passe">👁</button>
+      </div>
+      <button class="entrar" type="submit">Login</button>
+    </form>
+    <p class="lg-rodape">Não tem conta? <a href="{{ url_for('ajuda', slug='cadastro') }}">Cadastre-se</a> ou<br><a href="{{ url_for('ajuda', slug='consultar-cadastro') }}">Consulte o seu cadastro</a></p>
+  </div></div>
+</div>
+<a class="fab" href="{{ url_for('ajuda', slug='suporte') }}" title="Suporte" aria-label="Suporte">🎧</a>
+<script>
+  document.getElementById('ver').onclick = () => { const s = document.getElementById('senha'); s.type = s.type === 'password' ? 'text' : 'password'; };
+</script>
+{% endblock %}

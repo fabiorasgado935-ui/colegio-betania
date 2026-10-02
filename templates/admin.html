@@ -1,0 +1,30 @@
+{% extends "admin_base.html" %}
+{% block titulo %}Betânia ADM{% endblock %}
+{% block conteudo %}
+<div class="stats">
+  <div class="stat"><span>Total de Alunos</span><b>{{ stats.alunos }}</b></div>
+  <div class="stat"><span>Professores</span><b>{{ stats.professores }}</b></div>
+  <div class="stat"><span>Turmas Activas</span><b>{{ stats.turmas }}</b></div>
+  <div class="stat"><span>Pendências Doc.</span><b class="neg">{{ stats.pendencias }}</b></div>
+</div>
+<section class="painel">
+  <h2>⚙️ Acções rápidas de sistema</h2>
+  <div class="atalhos">
+    <a class="bt azul" href="{{ url_for('admin_modulo', slug='criar-turma') }}">+ Criar Turma</a>
+    <a class="bt verde" href="{{ url_for('admin_modulo', slug='abrir-caderneta') }}">📒 Abrir Caderneta</a>
+    <a class="bt laranja" href="{{ url_for('admin_modulo', slug='emitir-pauta') }}">📋 Emitir Pauta</a>
+    <a class="bt roxo" href="{{ url_for('admin_modulo', slug='notificar') }}">🔔 Notificar</a>
+  </div>
+</section>
+<section class="painel">
+  <h2>📜 Registo de actividades recentes (auditoria)</h2>
+  <div class="tabela"><table class="audit">
+    <tr><th>Data/Hora</th><th>Utilizador</th><th>Acção realizada</th><th>Estado</th></tr>
+    {% for r in registos %}<tr>
+      <td>{{ r.data_hora[8:10] }}/{{ r.data_hora[5:7] }} {{ r.data_hora[11:16] }}</td>
+      <td>{{ r.utilizador }}</td><td>{{ r.acao }}</td>
+      <td class="{{ 'pos' if r.estado in ('Aprovado','Concluído') else 'neg' if r.estado == 'Falhou' else 'pend' }}">{{ r.estado }}</td>
+    </tr>{% else %}<tr><td colspan="4">Sem actividade registada.</td></tr>{% endfor %}
+  </table></div>
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "admin_base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block conteudo %}
+<h2 class="tit-pag">{{ titulo }} <small>{{ linhas|length }} registos</small></h2>
+<div class="painel tabela"><table class="audit">
+  {% if linhas %}<tr>{% for k in linhas[0].keys() %}<th>{{ k }}</th>{% endfor %}</tr>
+  {% for l in linhas %}<tr>{% for v in l %}<td>{{ v if v is not none else '—' }}</td>{% endfor %}</tr>{% endfor %}
+  {% else %}<tr><td>Sem registos.</td></tr>{% endif %}
+</table></div>
+{% endblock %}

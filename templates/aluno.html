@@ -1,0 +1,64 @@
+{% extends "aluno_base.html" %}
+{% block titulo %}Meu Painel{% endblock %}
+{% block conteudo %}
+<div class="g2 g23">
+  <section class="cx tn">
+    <h2 class="sem-linha">Total de Notas</h2>
+    <div class="legenda">
+      <span><i style="background:#1d2026"></i>Negativas : <b>{{ tot.neg }} - {{ tot.pn }}%</b></span>
+      <span><i style="background:#d96f2f"></i>Positivas : <b>{{ tot.pos }} - {{ tot.pp }}%</b></span>
+    </div>
+    <div class="donut {{ 'vazio' if not tot.total }}" style="--p:{{ tot.pp }}"><div class="furo"><b>{{ tot.total }}</b><small>Notas</small></div></div>
+  </section>
+  <section class="cx tm">
+    <h2 class="sem-linha">Três Melhores Disciplinas</h2>
+    <small class="ano">{{ ano }}</small>
+    {% if melhores %}
+    <div class="barras">
+      {% for m in melhores %}<div class="barra"><b>{{ m.m }}</b><i class="c{{ loop.index }}" style="height:{{ (m.m / 20 * 100)|round|int }}px"></i><small>{{ m.disciplina }}</small></div>{% endfor %}
+    </div>
+    {% else %}
+    <div class="indisp">
+      <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="12" fill="#e9ecf3"/><rect x="10" y="14" width="10" height="32" rx="3" fill="#8bc34a"/><rect x="25" y="28" width="10" height="18" rx="3" fill="#ec407a"/><rect x="40" y="10" width="10" height="36" rx="3" fill="#2196f3"/></svg>
+      <strong>Dados Indisponíveis</strong>
+      <span>{{ 'Nenhum trimestre está disponível para consulta no momento.' if not meus_tri else 'Sem notas completas neste período.' }}</span>
+    </div>
+    {% endif %}
+    <div class="fchips">
+      <a class="fch {{ 'ativo' if mel_tri == 0 }}" href="{{ url_for('aluno', rank=rank_tri, melhores=0) }}">Todos</a>
+      {% for n, r in ((1,'I'),(2,'II'),(3,'III')) %}
+        {% if n in meus_tri %}<a class="fch {{ 'ativo' if mel_tri == n }}" href="{{ url_for('aluno', rank=rank_tri, melhores=n) }}">{{ r }} Trimestre</a>
+        {% else %}<span class="fch" title="Sem notas lançadas">{{ r }} Trimestre 🔒</span>{% endif %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<div class="g2 alto">
+  <section class="cx perfil">
+    <div class="foto">{{ iniciais }}</div>
+    <div class="dados">
+      <strong>{{ eu.nome|upper }} - {{ '%05d'|format(eu.id) }}</strong>
+      <span>{{ eu.nome_turma if eu.nome_turma else 'Sem turma definida este ano lectivo' }}</span>
+      <span>Nº {{ '%02d'|format(eu.id) }} neste ano lectivo</span>
+    </div>
+  </section>
+  <section class="cx"><h2>Ranking da Minha Turma</h2>
+    <div class="fchips">
+      <a class="fch {{ 'ativo' if rank_tri == 0 }}" href="{{ url_for('aluno', rank=0, melhores=mel_tri) }}">Todos</a>
+      {% for n, r in ((1,'I'),(2,'II'),(3,'III')) %}
+        {% if n in liberados %}<a class="fch {{ 'ativo' if rank_tri == n }}" href="{{ url_for('aluno', rank=n, melhores=mel_tri) }}">{{ r }} Trimestre</a>
+        {% else %}<span class="fch" title="Sem notas lançadas">{{ r }} Trimestre 🔒</span>{% endif %}
+      {% endfor %}
+    </div>
+    <table class="rk">
+      <tr><th>Posição</th><th>Nome</th><th>Pontuação</th></tr>
+      {% for r in ranking %}<tr class="{{ 'eu' if r.id == eu.id }}"><td>{{ loop.index }}º</td><td>{{ r.nome }}</td><td>{{ r.pont }}</td></tr>
+      {% else %}<tr><td colspan="3" class="vazio">Não há dados para mostrar</td></tr>{% endfor %}
+    </table>
+  </section>
+</div>
+
+<h2 class="tit-sec">Resumo do Horário</h2>
+<p class="linha">Sem próximos horários disponíveis.</p>
+{% endblock %}

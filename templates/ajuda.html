@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }} · Colégio Betânia{% endblock %}
+{% block corpo %}
+<div class="lg" style="grid-template-columns:1fr"><div class="lg-lado"><div class="lg-card">
+  <img class="logo-img" src="{{ url_for('static', filename='logo.jpg') }}" alt="Colégio Betânia" width="120">
+  <h1>{{ titulo }}</h1>
+  <p class="sub2">Esta funcionalidade ainda está em desenvolvimento. Por favor contacte a secretaria do colégio.</p>
+  <p class="lg-rodape"><a href="{{ url_for('index') }}">Voltar ao login</a></p>
+</div></div></div>
+{% endblock %}

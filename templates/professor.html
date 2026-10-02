@@ -1,0 +1,44 @@
+{% extends "professor_base.html" %}
+{% block titulo %}Painel do Professor{% endblock %}
+{% block conteudo %}
+<div class="g2 pf-topo">
+  <section class="painel pf-perfil">
+    <div class="pf-foto">👤</div>
+    <div class="pf-dados">
+      <strong>{{ prof.nome|upper }}</strong>
+      <span>Nº Agente: P-{{ '%05d'|format(prof.id) }}</span>
+      <span>Dep. {{ prof.disciplina }}</span>
+      <span class="serv">● Em Serviço</span>
+    </div>
+  </section>
+  <section class="painel" id="turmas">
+    <h2>📚 Minhas Turmas Atribuídas</h2>
+    {% for t in turmas %}
+      <a class="pf-turma {{ 'ativo' if turma and t.id == turma.id }}" href="{{ url_for('professor', turma=t.id, trimestre=tri) }}#lancamento">{{ t.nome_turma }} - {{ prof.disciplina }} <small>({{ t.ano_lectivo }})</small></a>
+    {% else %}<p>Ainda não tem turmas atribuídas.</p>{% endfor %}
+  </section>
+</div>
+
+{% if turma %}
+<section class="painel" id="lancamento">
+  <h2>● Lançamento Rápido - Turma {{ turma.nome_turma }}</h2>
+  <div class="chips">
+    {% for n in (1,2,3) %}<a class="chip {{ 'ativo' if n == tri }}" href="{{ url_for('professor', turma=turma.id, trimestre=n) }}#lancamento">{{ n }}º trimestre</a>{% endfor %}
+  </div>
+  <form method="post" action="{{ url_for('salvar_notas') }}">
+    <input type="hidden" name="turma" value="{{ turma.id }}"><input type="hidden" name="trimestre" value="{{ tri }}">
+    <div class="tabela"><table class="audit pf-notas">
+      <tr><th>Nº</th><th>Nome do Aluno</th><th>MAC</th><th>NPP</th><th>NPT</th></tr>
+      {% for a in alunos %}<tr>
+        <td>{{ '%02d'|format(loop.index) }}</td><td><b>{{ a.nome }}</b></td>
+        {% for k in ('mac','npp','npt') %}
+        <td><input name="{{ k }}_{{ a.id }}" type="number" min="0" max="20" step="0.1" placeholder="–" value="{{ a[k] if a[k] is not none }}" aria-label="{{ k|upper }} de {{ a.nome }}"></td>
+        {% endfor %}
+      </tr>{% else %}<tr><td colspan="5">Esta turma ainda não tem alunos.</td></tr>{% endfor %}
+    </table></div>
+    <p class="nota-rodape">Notas de 0 a 20. Deixe em branco o que ainda não foi avaliado.</p>
+    <div class="dir"><button type="submit" class="bt laranja">Guardar Notas</button></div>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

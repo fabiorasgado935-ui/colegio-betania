@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% set itens = [
+ ('📈','Meu Painel', url_for('aluno')),
+ ('🎓','Perfil', url_for('aluno_modulo', slug='perfil')),
+ ('🕒','Horário', url_for('aluno_modulo', slug='horario')),
+ ('🪪','Boletim', url_for('aluno_boletim')),
+ ('🗓️','Faltas', url_for('aluno_modulo', slug='faltas')),
+ ('📚','Grelha Curricular', url_for('aluno_modulo', slug='grelha')),
+ ('💳','Cartão', url_for('aluno_modulo', slug='cartao')),
+ ('✅','Justificativas', url_for('aluno_modulo', slug='justificativas')),
+ ('📨','Convocatórias', url_for('aluno_modulo', slug='convocatorias')),
+ ('📄','Documentos', url_for('aluno_modulo', slug='documentos')),
+ ('📝','Folhas de prova', url_for('aluno_modulo', slug='folhas-de-prova')),
+ ('📋','Informações', url_for('aluno_modulo', slug='informacoes')),
+ ('🅰️','Exames Especiais', url_for('aluno_modulo', slug='exames-especiais')),
+ ('📈','Melhoria de Notas', url_for('aluno_modulo', slug='melhoria-de-notas')),
+ ('⚙️','Configurações do Perfil', url_for('aluno_modulo', slug='configuracoes-perfil')),
+ ('🎧','Suporte', url_for('aluno_modulo', slug='suporte')),
+ ('⚠️','Registo de Actividades', url_for('aluno_modulo', slug='registo-actividades'))] %}
+{% block corpo %}
+<div class="app al">
+  <nav class="lateral">
+    <div class="marca"><span class="logo"><img src="{{ url_for('static', filename='logo.jpg') }}" alt=""></span>Portal do Betânia</div>
+    {% for ic, nome, url in itens %}<a class="{{ 'ativo' if request.path == url }}" href="{{ url }}"><span class="ic">{{ ic }}</span>{{ nome }}</a>{% endfor %}
+    <a class="sair" href="{{ url_for('logout') }}"><span class="ic">🚪</span>Terminar sessão</a>
+  </nav>
+  <main>
+    <header class="topo">
+      <div class="topo-esq"><button id="menu-btn" aria-label="Abrir/fechar menu">☰</button><h1>{% block titulo_pag %}Meu Painel{% endblock %}</h1></div>
+      <div class="topo-dir"><span>{{ ano or '' }}</span><span aria-hidden="true">📅</span><span aria-hidden="true">🔔</span><span class="avatar" title="{{ session.nome }}">{{ iniciais }}</span></div>
+    </header>
+    <div class="conteudo-adm">
+      {% for m in get_flashed_messages() %}<div class="aviso" role="status">{{ m }}</div>{% endfor %}
+      {% block conteudo %}{% endblock %}
+    </div>
+  </main>
+</div>
+<a class="fab" href="{{ url_for('aluno_modulo', slug='suporte') }}" title="Suporte" aria-label="Suporte">🎧</a>
+<script>
+  const app = document.querySelector('.al');
+  document.getElementById('menu-btn').onclick = () => app.classList.toggle('fechado');
+  if (innerWidth < 760) app.classList.add('fechado');
+</script>
+{% endblock %}

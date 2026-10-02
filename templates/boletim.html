@@ -1,0 +1,18 @@
+{% extends "aluno_base.html" %}
+{% block titulo %}Boletim{% endblock %}
+{% block titulo_pag %}Boletim{% endblock %}
+{% block conteudo %}
+<section class="cx"><h2>Boletim de notas · {{ turma or 'Sem turma' }}</h2>
+  <div class="fchips">
+    {% for n in (1,2,3) %}<a class="fch {{ 'ativo' if n == tri }}" href="{{ url_for('aluno_boletim', trimestre=n) }}">{{ n }}º Trimestre</a>{% endfor %}
+  </div>
+  <div class="tabela"><table class="rk">
+    <tr><th>Disciplina</th><th>MAC</th><th>NPP</th><th>NPT</th><th>Média (MT)</th></tr>
+    {% for b in boletim %}<tr>
+      <td>{{ b.disciplina }}</td>
+      <td>{{ b.mac if b.mac is not none else '—' }}</td><td>{{ b.npp if b.npp is not none else '—' }}</td><td>{{ b.npt if b.npt is not none else '—' }}</td>
+      <td class="{{ 'pos' if b.mt is not none and b.mt >= 10 else 'neg' if b.mt is not none }}"><b>{{ b.mt if b.mt is not none else '—' }}</b></td>
+    </tr>{% else %}<tr><td colspan="5" class="vazio">Ainda não há notas lançadas neste trimestre.</td></tr>{% endfor %}
+  </table></div>
+</section>
+{% endblock %}

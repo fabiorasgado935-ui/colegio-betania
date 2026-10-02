@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% set itens = [
+ ('📊','Dashboard Central', url_for('admin')),
+ ('👥','Gestão de Alunos', url_for('admin_lista', tipo='alunos')),
+ ('🧑‍🏫','Corpo Docente', url_for('admin_lista', tipo='professores')),
+ ('🏫','Turmas e Horários', url_for('admin_lista', tipo='turmas')),
+ ('💳','Tesouraria / Propinas', url_for('admin_modulo', slug='tesouraria')),
+ ('📝','Matrícula / Inscrições', url_for('admin_modulo', slug='matriculas')),
+ ('📜','Emissão de Certificados', url_for('admin_modulo', slug='certificados')),
+ ('✅','Homologar Pauta', url_for('admin_modulo', slug='homologar-pauta')),
+ ('⚙️','Configurações', url_for('admin_modulo', slug='configuracoes'))] %}
+{% block corpo %}
+<div class="app adm">
+  <nav class="lateral">
+    <div class="marca"><span class="logo"><img src="{{ url_for('static', filename='logo.jpg') }}" alt=""></span>Betânia ADM</div>
+    {% for ic, nome, url in itens %}<a class="{{ 'ativo' if request.path == url }}" href="{{ url }}"><span class="ic">{{ ic }}</span>{{ nome }}</a>{% endfor %}
+    <a class="sair" href="{{ url_for('logout') }}">Terminar sessão</a>
+  </nav>
+  <main>
+    <header class="topo"><h1>⚙️ Painel de Administração &amp; Secretária Geral</h1><span>Ano Lectivo {{ ano or '' }}</span></header>
+    <div class="conteudo-adm">
+      {% for m in get_flashed_messages() %}<div class="aviso" role="status">{{ m }}</div>{% endfor %}
+      {% block conteudo %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}
